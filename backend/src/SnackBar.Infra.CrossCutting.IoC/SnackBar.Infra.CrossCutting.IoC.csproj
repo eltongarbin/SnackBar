@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SnackBar.Application\SnackBar.Application.csproj" />
+    <ProjectReference Include="..\SnackBar.Domain\SnackBar.Domain.csproj" />
+    <ProjectReference Include="..\SnackBar.Infra.CrossCutting.Bus\SnackBar.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\SnackBar.Infra.Data\SnackBar.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>

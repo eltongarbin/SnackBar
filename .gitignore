@@ -1,0 +1,19 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/backend/.vs
+/backend/src/SnackBar.Api/bin/Debug/netcoreapp1.1
+/backend/src/SnackBar.Api/obj
+/backend/src/SnackBar.Application/bin/Debug
+/backend/src/SnackBar.Application/obj
+/backend/src/SnackBar.Domain/bin/Debug/netstandard1.6
+/backend/src/SnackBar.Domain/obj
+/backend/src/SnackBar.Domain.Core/obj
+/backend/src/SnackBar.Domain.Core/bin/Debug/netstandard1.6
+/backend/src/SnackBar.Infra.CrossCutting.Bus/bin/Debug
+/backend/src/SnackBar.Infra.CrossCutting.Bus/obj
+/backend/src/SnackBar.Infra.CrossCutting.IoC/obj
+/backend/src/SnackBar.Infra.CrossCutting.IoC/bin/Debug/netstandard1.6
+/backend/src/SnackBar.Infra.Data/obj
+/backend/src/SnackBar.Infra.Data/bin/Debug/netstandard1.6
