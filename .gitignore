@@ -17,3 +17,5 @@
 /backend/src/SnackBar.Infra.CrossCutting.IoC/bin/Debug/netstandard1.6
 /backend/src/SnackBar.Infra.Data/obj
 /backend/src/SnackBar.Infra.Data/bin/Debug/netstandard1.6
+/backend/src/SnackBar.Application/SnackBar.Application.csproj.user
+/backend/src/SnackBar.Domain/SnackBar.Domain.csproj.user

@@ -15,7 +15,7 @@ namespace SnackBar.Domain.Core.Models
             ValidationResult = new ValidationResult();
         }
 
-        public abstract bool EhValido();
+        public abstract bool IsValid();
 
         public override bool Equals(object obj)
         {
