@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using SnackBar.Domain.Core.Models;
+﻿using SnackBar.Domain.Core.Models;
 using SnackBar.Domain.Lanches;
-using SnackBar.Domain.Pedidos.Models.Entity;
+using System;
+using System.Collections.Generic;
 
-namespace SnackBar.Domain.Pedidos.Models
+namespace SnackBar.Domain.Pedidos.Models.Entity
 {
     public class PedidoLanche : Entity<PedidoLanche>
     {

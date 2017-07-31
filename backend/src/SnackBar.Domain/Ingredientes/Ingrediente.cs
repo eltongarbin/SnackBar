@@ -1,4 +1,5 @@
-﻿using SnackBar.Domain.Core.Models;
+﻿using FluentValidation;
+using SnackBar.Domain.Core.Models;
 using SnackBar.Domain.Lanches.Models.Entity;
 using SnackBar.Domain.Pedidos.Models.Entity;
 using System;
@@ -28,7 +29,16 @@ namespace SnackBar.Domain.Ingredientes
         // Validações
         public override bool IsValid()
         {
-            return true;
+            RuleFor(e => e.Nome)
+                .NotEmpty().WithMessage("O nome do ingrediente precisa ser fornecido.")
+                .MaximumLength(50).WithMessage("O nome do ingrediente precisa ter até 50 caracteres.");
+
+            RuleFor(e => e.Valor)
+                .GreaterThan(0).WithMessage("O valor do ingrediente precisa ser fornecido e maior que zero.");
+
+            ValidationResult = Validate(this);
+
+            return ValidationResult.IsValid;
         }
     }
 }

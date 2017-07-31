@@ -12,6 +12,17 @@ namespace SnackBar.Domain.Lanches.Models.Entity
         public virtual Lanche Lanche { get; private set; }
         public virtual Ingrediente Ingrediente { get; private set; }
 
+        // Culpa do EF
+        protected LanchePredefinido() { }
+
+        public LanchePredefinido(Guid lancheId, 
+                                 Guid ingredienteId)
+        {
+            LancheId = lancheId;
+            IngredienteId = ingredienteId;
+        }
+
+        // Validações
         public override bool IsValid()
         {
             return true;

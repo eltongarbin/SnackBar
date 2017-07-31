@@ -1,6 +1,7 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using SnackBar.Domain.Core.Models;
-using SnackBar.Domain.Pedidos.Models;
+using SnackBar.Domain.Pedidos.Models.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,18 +80,25 @@ namespace SnackBar.Domain.Pedidos
         // Validações
         public override bool IsValid()
         {
-            return true;
+            RuleFor(e => e.Cliente)
+                .NotEmpty().WithMessage("O nome do cliente precisa ser fornecido.")
+                .Length(4, 150).WithMessage("O nome do cliente precisa ter entre 4 e 150 caracteres.");
+
+            ValidationResult = Validate(this);
+
+            foreach (var pedidoLanche in PedidosLanches)
+            {
+                foreach (var error in pedidoLanche.ValidationResult.Errors)
+                {
+                    ValidationResult.Errors.Add(error);
+                }
+            }
+
+            return ValidationResult.IsValid;
         }
 
         public static class PedidoFactory
         {
-            public static Pedido CriarPedido(Guid id,
-                                             string cliente,
-                                             ICollection<PedidoLanche> pedidoLanches)
-            {
-                return CriarPedido(id, cliente, DateTime.Now, null, null, pedidoLanches);
-            }
-
             public static Pedido CriarPedido(Guid id,
                                              string cliente,
                                              DateTime dataPedido,
