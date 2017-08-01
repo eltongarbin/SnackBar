@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using SnackBar.Api.Configurations;
 using SnackBar.Api.Middlewares;
 using SnackBar.Infra.CrossCutting.Bus;
 using SnackBar.Infra.CrossCutting.IoC;
+using SnackBar.Infra.Data.Context;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SnackBar.Api
@@ -30,7 +32,20 @@ namespace SnackBar.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            string sqlConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            bool useInMemoryProvider = bool.Parse(Configuration["Data:SnackBarConnection:InMemoryProvider"]);
 
+            services.AddDbContext<SnackBarContext>(options => {
+                switch (useInMemoryProvider)
+                {
+                    case true:
+                        options.UseInMemoryDatabase();
+                        break;
+                    default:
+                        options.UseSqlServer(sqlConnectionString);
+                        break;
+                }
+            });
 
             services.AddOptions();
 
