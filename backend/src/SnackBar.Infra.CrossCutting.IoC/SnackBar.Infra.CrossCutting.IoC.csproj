@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SnackBar.Application\SnackBar.Application.csproj" />
     <ProjectReference Include="..\SnackBar.Domain\SnackBar.Domain.csproj" />
     <ProjectReference Include="..\SnackBar.Infra.CrossCutting.Bus\SnackBar.Infra.CrossCutting.Bus.csproj" />
     <ProjectReference Include="..\SnackBar.Infra.Data\SnackBar.Infra.Data.csproj" />

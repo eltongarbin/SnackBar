@@ -19,3 +19,4 @@
 /backend/src/SnackBar.Infra.Data/bin/Debug/netstandard1.6
 /backend/src/SnackBar.Application/SnackBar.Application.csproj.user
 /backend/src/SnackBar.Domain/SnackBar.Domain.csproj.user
+/backend/src/SnackBar.Api/SnackBar.Api.csproj.user

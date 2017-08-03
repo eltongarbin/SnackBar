@@ -8,6 +8,7 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="2.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
@@ -24,6 +25,7 @@
     <ProjectReference Include="..\SnackBar.Domain.Core\SnackBar.Domain.Core.csproj" />
     <ProjectReference Include="..\SnackBar.Domain\SnackBar.Domain.csproj" />
     <ProjectReference Include="..\SnackBar.Infra.CrossCutting.IoC\SnackBar.Infra.CrossCutting.IoC.csproj" />
+    <ProjectReference Include="..\SnackBar.Infra.Data\SnackBar.Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using SnackBar.Infra.CrossCutting.Bus;
 using SnackBar.Infra.CrossCutting.IoC;
 using SnackBar.Infra.Data.Context;
 using Swashbuckle.AspNetCore.Swagger;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace SnackBar.Api
 {
@@ -55,6 +57,8 @@ namespace SnackBar.Api
                 options.UseCentralRoutePrefix(new RouteAttribute("api/v{version}"));
             });
 
+            services.AddAutoMapper();
+
             services.AddSwaggerGen(s =>
             {
                 s.SwaggerDoc("v1", new Info
@@ -77,6 +81,9 @@ namespace SnackBar.Api
                 });
             });
 
+            services.AddSingleton(Mapper.Configuration);
+            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<IConfigurationProvider>(), sp.GetService));
+
             RegisterServices(services);
         }
 
@@ -87,6 +94,13 @@ namespace SnackBar.Api
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseCors(c =>
+            {
+                c.AllowAnyHeader();
+                c.AllowAnyMethod();
+                c.AllowAnyOrigin();
+            });
 
             app.UseStaticFiles();
             app.UseMvc();
