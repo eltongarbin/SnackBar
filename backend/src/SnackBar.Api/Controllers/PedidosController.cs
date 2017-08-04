@@ -26,10 +26,24 @@ namespace SnackBar.Api.Controllers
         }
 
         [HttpGet]
+        [Route("pedidos")]
+        public IEnumerable<PedidoViewModel> Get()
+        {
+            return _mapper.Map<IEnumerable<PedidoViewModel>>(_pedidoRepository.ObterTodos());
+        }
+
+        [HttpGet]
         [Route("pedidos/ingredientes")]
         public IEnumerable<IngredienteViewModel> ObterIngredientes()
         {
             return _mapper.Map<IEnumerable<IngredienteViewModel>>(_pedidoRepository.ObterIngredientes());
+        }
+
+        [HttpGet]
+        [Route("pedidos/lanches-cardapio")]
+        public IEnumerable<LancheViewModel> ObterLanchesCardapio()
+        {
+            return _mapper.Map<IEnumerable<LancheViewModel>>(_pedidoRepository.ObterLanchesCardapio());
         }
     }
 }

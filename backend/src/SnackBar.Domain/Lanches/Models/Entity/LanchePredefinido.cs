@@ -6,8 +6,8 @@ namespace SnackBar.Domain.Lanches.Models.Entity
 {
     public class LanchePredefinido : Entity<LanchePredefinido>
     {
-        public Guid LancheId { get; private set; }
-        public Guid IngredienteId { get; private set; }
+        public Guid LancheId { get; set; }
+        public Guid IngredienteId { get; set; }
 
         public virtual Lanche Lanche { get; private set; }
         public virtual Ingrediente Ingrediente { get; private set; }
@@ -15,11 +15,14 @@ namespace SnackBar.Domain.Lanches.Models.Entity
         // Culpa do EF
         protected LanchePredefinido() { }
 
-        public LanchePredefinido(Guid lancheId, 
-                                 Guid ingredienteId)
+        public LanchePredefinido(Lanche lanche, 
+                                 Ingrediente ingrediente)
         {
-            LancheId = lancheId;
-            IngredienteId = ingredienteId;
+            Id = Guid.NewGuid();
+            LancheId = lanche.Id;
+            IngredienteId = ingrediente.Id;
+            Lanche = lanche;
+            Ingrediente = ingrediente;
         }
 
         // Validações

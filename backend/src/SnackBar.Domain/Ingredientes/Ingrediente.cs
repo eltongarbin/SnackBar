@@ -12,16 +12,17 @@ namespace SnackBar.Domain.Ingredientes
         public string Nome { get; private set; }
         public decimal Valor { get; private set; }
 
-        public virtual ICollection<LanchePredefinido> LanchesPredefinidos { get; private set; }
-        public virtual ICollection<LancheCustomizado> LanchesCustomizados { get; private set; }
+        public virtual ICollection<LanchePredefinido> LanchesPredefinidos { get; set; }
+        public virtual ICollection<LancheCustomizado> LanchesCustomizados { get; set; }
 
         // Culpa do EF
         protected Ingrediente() { }
 
-        public Ingrediente(string nome,
+        public Ingrediente(Guid id,
+                           string nome,
                            decimal valor)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Nome = nome;
             Valor = valor;
         }

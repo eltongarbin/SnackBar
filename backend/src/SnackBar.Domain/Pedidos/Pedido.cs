@@ -16,7 +16,7 @@ namespace SnackBar.Domain.Pedidos
         public DateTime? DataCancelamento { get; private set; }
         public decimal Valor { get; private set; }
 
-        public virtual ICollection<PedidoLanche> PedidosLanches { get; private set; }
+        public virtual ICollection<PedidoLanche> PedidosLanches { get; set; }
 
         // Culpa do EF
         protected Pedido() { }

@@ -10,17 +10,21 @@ namespace SnackBar.Domain.Lanches
     public class Lanche : Entity<Lanche>
     {
         public string Nome { get; private set; }
+        public decimal Valor { get; private set; }
 
-        public ICollection<LanchePredefinido> LanchesPredefinidos { get; private set; }
-        public ICollection<PedidoLanche> PedidosLanches { get; private set; }
+        public ICollection<LanchePredefinido> LanchesPredefinidos { get; set; }
+        public ICollection<PedidoLanche> PedidosLanches { get; set; }
 
         // Culpa do EF
         protected Lanche() { }
 
-        public Lanche(string nome)
+        public Lanche(Guid id,
+                      string nome,
+                      decimal valor)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Nome = nome;
+            Valor = valor;
         }
 
         // Validações

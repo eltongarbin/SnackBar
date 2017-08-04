@@ -14,21 +14,19 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
         public virtual Pedido Pedido { get; private set; }
         public virtual Lanche Lanche { get; private set; }
 
-        public virtual ICollection<LancheCustomizado> LanchesCustomizados { get; private set; }
+        public virtual ICollection<LancheCustomizado> LanchesCustomizados { get; set; }
 
         // Culpa do EF
         protected PedidoLanche() { }
 
-        public PedidoLanche(Guid id,
-                            Guid pedidoId,
-                            Lanche lanche,
-                            ICollection<LancheCustomizado> lanchesCustomizados)
+        public PedidoLanche(Pedido pedido,
+                            Lanche lanche)
         {
-            Id = id;
-            PedidoId = pedidoId;
+            Id = Guid.NewGuid();
+            PedidoId = pedido.Id;
             LancheId = lanche.Id;
+            Pedido = pedido;
             Lanche = lanche;
-            LanchesCustomizados = lanchesCustomizados;
         }
 
         // Validações
