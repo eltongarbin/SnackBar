@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SnackBar.Api.ViewModels;
 using SnackBar.Domain.Core.Bus;
@@ -31,6 +32,14 @@ namespace SnackBar.Api.Controllers
         {
             return _mapper.Map<IEnumerable<PedidoViewModel>>(_pedidoRepository.ObterTodos());
         }
+
+        [HttpGet]
+        [Route("pedidos/{id:guid}")]
+        public DetalhePedidoViewModel Get(Guid id, int version)
+        {
+            return _mapper.Map<DetalhePedidoViewModel>(_pedidoRepository.ObterPorId(id));
+        }
+
 
         [HttpGet]
         [Route("pedidos/ingredientes")]

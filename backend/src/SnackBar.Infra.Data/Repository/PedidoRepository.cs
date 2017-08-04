@@ -88,5 +88,16 @@ namespace SnackBar.Infra.Data.Repository
 
             return lookup.Values.ToList();
         }
+
+        public override Pedido ObterPorId(Guid id)
+        {
+            return DbSet.AsNoTracking()
+                .Include(p => p.PedidosLanches)
+                    .ThenInclude(l => l.Lanche)
+                .Include(p => p.PedidosLanches)
+                    .ThenInclude(pl => pl.LanchesCustomizados)
+                        .ThenInclude(lc => lc.Ingrediente)
+                .FirstOrDefault(t => t.Id == id);
+        }
     }
 }
