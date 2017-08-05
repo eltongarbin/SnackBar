@@ -2,6 +2,7 @@
 using SnackBar.Domain.Lanches;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 
 namespace SnackBar.Domain.Pedidos.Models.Entity
@@ -10,7 +11,9 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
     {
         public Guid PedidoId { get; private set; }
         public Guid LancheId { get; private set; }
-        public decimal Valor { get; private set; }
+        public decimal ValorTotal { get; private set; }
+        public string Promocao { get; private set; }
+        public decimal Desconto { get; private set; }
 
         public virtual Pedido Pedido { get; private set; }
         public virtual Lanche Lanche { get; private set; }
@@ -20,15 +23,27 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
         // Culpa do EF
         protected PedidoLanche() { }
 
-        public PedidoLanche(Guid id,
-                            Guid pedidoId,
-                            Guid lancheId,
-                            ICollection<LancheCustomizado> lanchesCustomizados)
+        public void IncluirPromocao(string promocao,
+                                    decimal desconto)
         {
-            Id = id;
-            PedidoId = pedidoId;
-            LancheId = lancheId;
-            LanchesCustomizados = lanchesCustomizados;
+            Promocao = promocao;
+            Desconto = desconto;
+
+            CalcularValorTotal();
+        }
+
+        public void CalcularValorTotal()
+        {
+            ValorTotal = LanchesCustomizados.Select(lc => lc.Ingrediente).Sum(i => i.Valor) + Desconto;
+        }
+
+        public void CalcularValorTotal(decimal valorSemDesconto,
+                                       string promocao,
+                                       decimal desconto)
+        {
+            ValorTotal = valorSemDesconto - desconto;
+            Promocao = promocao;
+            Desconto = desconto;
         }
 
         // Validações
@@ -38,6 +53,9 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
                 .NotNull()
                 .Must(e => e.Count > 0)
                 .WithMessage("Precisa ser fornecido a composição do lanche.");
+
+            RuleFor(e => e.Promocao)
+                .Length(2, 20).WithMessage("O nome da promoção precisa ter entre 2 e 20 caracteres.");
 
             ValidationResult = Validate(this);
 

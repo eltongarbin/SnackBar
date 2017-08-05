@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using SnackBar.Api.ViewModels;
-using SnackBar.Domain.Ingredientes;
 using SnackBar.Domain.Pedidos.Commands;
+using System.Linq;
 
 namespace SnackBar.Api.AutoMapper
 {
@@ -16,7 +15,7 @@ namespace SnackBar.Api.AutoMapper
                         c.Lanches.Select(l => new IncluirPedidoLancheCommand(
                                 c.Id,
                                 l.Id,
-                                l.Ingredientes.Select(i => new Ingrediente(i.Id, i.Nome, i.Valor))
+                                l.Ingredientes.Select(i => i.Id)
                             )
                         )
                     )

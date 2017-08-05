@@ -13,7 +13,7 @@ namespace SnackBar.Domain.Pedidos
         public DateTime DataPedido { get; private set; }
         public DateTime? DataEntrega { get; private set; }
         public DateTime? DataCancelamento { get; private set; }
-        public decimal Valor { get; private set; }
+        public decimal ValorTotal { get; private set; }
 
         public virtual ICollection<PedidoLanche> PedidosLanches { get; set; }
 
@@ -39,6 +39,11 @@ namespace SnackBar.Domain.Pedidos
         public void CancelarPedido()
         {
             DataCancelamento = DateTime.Now;
+        }
+
+        public void CalcularValorTotal()
+        {
+            ValorTotal = PedidosLanches.Sum(pl => pl.ValorTotal);
         }
 
         // Validações

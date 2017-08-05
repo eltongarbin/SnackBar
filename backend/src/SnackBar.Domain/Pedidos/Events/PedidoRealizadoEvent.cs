@@ -7,12 +7,12 @@ namespace SnackBar.Domain.Pedidos.Events
         public PedidoRealizadoEvent(Guid id,
                                     string cliente,
                                     DateTime dataPedido,
-                                    decimal valor)
+                                    decimal valorTotal)
         {
             Id = id;
             Cliente = cliente;
             DataPedido = dataPedido;
-            Valor = valor;
+            ValorTotal = valorTotal;
 
             AggregateId = id;
         }

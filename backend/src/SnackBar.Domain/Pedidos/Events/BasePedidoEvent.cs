@@ -10,6 +10,6 @@ namespace SnackBar.Domain.Pedidos.Events
         public DateTime DataPedido { get; protected set; }
         public DateTime? DataEntrega { get; protected set; }
         public DateTime? DataCancelamento { get; protected set; }
-        public decimal Valor { get; protected set; }
+        public decimal ValorTotal { get; protected set; }
     }
 }

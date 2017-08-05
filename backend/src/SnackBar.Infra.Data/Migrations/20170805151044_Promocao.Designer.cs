@@ -8,9 +8,10 @@ using SnackBar.Infra.Data.Context;
 namespace SnackBar.Infra.Data.Migrations
 {
     [DbContext(typeof(SnackBarContext))]
-    partial class SnackBarContextModelSnapshot : ModelSnapshot
+    [Migration("20170805151044_Promocao")]
+    partial class Promocao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

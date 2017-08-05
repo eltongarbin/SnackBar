@@ -13,9 +13,6 @@ namespace SnackBar.Infra.Data.Mappings
                 .Ignore(e => e.ValidationResult)
                 .Ignore(e => e.CascadeMode);
 
-            builder.Property(e => e.Valor)
-                .IsRequired();
-
             builder.HasOne(e => e.Pedido)
                 .WithMany(e => e.PedidosLanches)
                 .HasForeignKey(e => e.PedidoId)
@@ -25,6 +22,9 @@ namespace SnackBar.Infra.Data.Mappings
                 .WithMany(e => e.PedidosLanches)
                 .HasForeignKey(e => e.LancheId)
                 .IsRequired();
+
+            builder.Property(e => e.Promocao)
+                .HasMaxLength(20);
         }
     }
 }

@@ -3,11 +3,12 @@ using SnackBar.Domain.Core.Bus;
 using SnackBar.Domain.Core.Events;
 using SnackBar.Domain.Core.Notifications;
 using SnackBar.Domain.Interfaces;
-using SnackBar.Domain.Pedidos.Repository;
-using System;
-using System.Linq;
 using SnackBar.Domain.Pedidos.Events;
 using SnackBar.Domain.Pedidos.Models.Entity;
+using SnackBar.Domain.Pedidos.Repository;
+using System.Collections.Generic;
+using System.Linq;
+using SnackBar.Domain.Pedidos.Models.Logic.Desconto;
 
 namespace SnackBar.Domain.Pedidos.Commands
 {
@@ -32,22 +33,11 @@ namespace SnackBar.Domain.Pedidos.Commands
             var pedido = Pedido.PedidoFactory.Criar(message.Cliente);
             message.SetarPedidoId(pedido.Id);
 
-            foreach (var lanche in message.IncluirPedidoLancheListCommand)
-            {
-                var pedidoLanche = PedidoLanche.PedidoLancheFactory.Criar(pedido.Id, lanche.LancheId);
+            PreencherEntidadesFilhas(ref pedido, message.IncluirPedidoLancheListCommand);
 
-                foreach (var ingrediente in lanche.Ingredientes)
-                {
-                    pedidoLanche.LanchesCustomizados.Add(new LancheCustomizado(Guid.NewGuid(), pedidoLanche.Id, ingrediente.Id));
-                }
-
-                pedido.PedidosLanches.Add(pedidoLanche);
-            }
+            VerificarPromocaoLanches(ref pedido);
 
             if (!PedidoValido(pedido))
-                return;
-
-            if (!EntidadesFilhasExistente(pedido, message.MessageType))
                 return;
 
             _pedidoRepository.Adicionar(pedido);
@@ -57,53 +47,62 @@ namespace SnackBar.Domain.Pedidos.Commands
                 _bus.RaiseEvent(new PedidoRealizadoEvent(pedido.Id,
                                                          pedido.Cliente,
                                                          pedido.DataPedido,
-                                                         pedido.Valor));
+                                                         pedido.ValorTotal));
             }
         }
 
-        private bool EntidadesFilhasExistente(Pedido pedido, string messageType)
+        private void VerificarPromocaoLanches(ref Pedido pedido)
         {
             foreach (var pedidoLanche in pedido.PedidosLanches)
             {
-                if (!PedidoLancheExistente(pedidoLanche, messageType))
-                    return false;
-            }
+                var lanche = _pedidoRepository.ObterLancheCardapioPorId(pedidoLanche.LancheId);
+                var pedidoLancheVerificar = PedidoLanche.PedidoLancheFactory.Criar(pedido, lanche);
 
-            return true;
-        }
-
-        private bool PedidoLancheExistente(PedidoLanche pedidoLanche, string messageType)
-        {
-            if (!LancheExistente(pedidoLanche.LancheId))
-            {
-                _bus.RaiseEvent(new DomainNotification(messageType, "Lanche não encontrado no cardápio."));
-                return false;
-            }
-
-            foreach (var ingredienteId in pedidoLanche.LanchesCustomizados.Select(lc => lc.IngredienteId))
-            {
-                if (!IngredienteExistente(ingredienteId))
+                foreach (var customizado in pedidoLanche.LanchesCustomizados)
                 {
-                    _bus.RaiseEvent(new DomainNotification(messageType, "Ingrediente não encontrado."));
-                    return false;
+                    var ingrediente = _pedidoRepository.ObterIngredientePorId(customizado.IngredienteId);
+                    pedidoLancheVerificar.LanchesCustomizados.Add(LancheCustomizado.LancheCustomizadoFactory.Criar(pedidoLanche,
+                                                                                                                   ingrediente));
                 }
+
+                var promocao = PromocaoPedidoLanche.PromocaoPedidoLancheFactory.Calcular(pedidoLancheVerificar);
+                var valor = pedidoLancheVerificar.LanchesCustomizados.Select(lc => lc.Ingrediente).Sum(i => i.Valor);
+
+                pedidoLanche.CalcularValorTotal(valor, promocao.Descricao, promocao.Desconto);
             }
 
-            return true;
+            pedido.CalcularValorTotal();
         }
 
-        private bool IngredienteExistente(Guid id)
+        private void PreencherEntidadesFilhas(ref Pedido pedido,
+                                              IEnumerable<IncluirPedidoLancheCommand> incluirPedidoLancheListCommand)
         {
-            var ingrediente = _pedidoRepository.ObterIngredientePorId(id);
+            foreach (var command in incluirPedidoLancheListCommand)
+            {
+                var lanche = _pedidoRepository.ObterLancheCardapioPorId(command.LancheId);
+                if (lanche == null)
+                {
+                    _bus.RaiseEvent(new DomainNotification(command.MessageType, "Lanche não encontrado no cardápio."));
+                    return;
+                }
 
-            return (ingrediente != null);
-        }
+                var pedidoLanche = PedidoLanche.PedidoLancheFactory.Criar(command.PedidoId, command.LancheId);
 
-        private bool LancheExistente(Guid id)
-        {
-            var lanche = _pedidoRepository.ObterLancheCardapioPorId(id);
+                foreach (var ingredienteId in command.IngredienteIdList)
+                {
+                    var ingrediente = _pedidoRepository.ObterIngredientePorId(ingredienteId);
+                    if (ingrediente == null)
+                    {
+                        _bus.RaiseEvent(new DomainNotification(command.MessageType, "Ingrediente não encontrado."));
+                        return;
+                    }
 
-            return (lanche != null);
+                    pedidoLanche.LanchesCustomizados.Add(LancheCustomizado.LancheCustomizadoFactory.Criar(pedidoLanche.Id,
+                                                                                                          ingredienteId));
+                }
+
+                pedido.PedidosLanches.Add(pedidoLanche);
+            }
         }
 
         private bool PedidoValido(Pedido pedido)

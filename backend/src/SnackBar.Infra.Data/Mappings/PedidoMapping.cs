@@ -16,9 +16,6 @@ namespace SnackBar.Infra.Data.Mappings
             builder.Property(e => e.Cliente)
                 .IsRequired()
                 .HasMaxLength(150);
-
-            builder.Property(e => e.Valor)
-                .IsRequired();
         }
     }
 }

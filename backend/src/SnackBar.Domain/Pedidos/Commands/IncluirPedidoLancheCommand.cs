@@ -1,5 +1,4 @@
 ﻿using SnackBar.Domain.Core.Commands;
-using SnackBar.Domain.Ingredientes;
 using System;
 using System.Collections.Generic;
 
@@ -9,15 +8,15 @@ namespace SnackBar.Domain.Pedidos.Commands
     {
         public Guid PedidoId { get; private set; }
         public Guid LancheId { get; private set; }
-        public IEnumerable<Ingrediente> Ingredientes { get; private set; }
+        public IEnumerable<Guid> IngredienteIdList { get; private set; }
 
         public IncluirPedidoLancheCommand(Guid pedidoId, 
                                           Guid lancheId, 
-                                          IEnumerable<Ingrediente> ingredientes)
+                                          IEnumerable<Guid> ingredienteIdList)
         {
             PedidoId = pedidoId;
             LancheId = lancheId;
-            Ingredientes = ingredientes;
+            IngredienteIdList = ingredienteIdList;
 
             AggregateId = pedidoId;
         }

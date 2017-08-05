@@ -14,19 +14,22 @@ namespace SnackBar.Api.AutoMapper
         {
             CreateMap<Ingrediente, IngredienteViewModel>();
             CreateMap<Lanche, LancheViewModel>()
+                .ForMember(d => d.ValorTotal, o => o.MapFrom(s => s.Valor))
                 .ForMember(d => d.Ingredientes, o => o.MapFrom(s => s.LanchesPredefinidos.Select(m => m.Ingrediente)));
             CreateMap<Pedido, PedidoViewModel>()
-                .ForMember(d => d.ValorTotal, o => o.MapFrom(s => s.Valor))
                 .ForMember(d => d.Lanches, o => o.MapFrom(s => s.PedidosLanches.Select(m => m.Lanche)));
             CreateMap<Pedido, DetalhePedidoViewModel>()
-                .ForMember(d => d.ValorTotal, o => o.MapFrom(s => s.Valor))
                 .ForMember(d => d.Lanches, o => o.MapFrom(s =>
                                                             s.PedidosLanches.Select(m => new LancheViewModel
                                                             {
                                                                 Id = m.Lanche.Id,
                                                                 Nome = m.Lanche.Nome,
-                                                                Valor = m.Valor,
-                                                                Ingredientes = Mapper.Map<IEnumerable<Ingrediente>, IEnumerable<IngredienteViewModel>>(m.LanchesCustomizados.Select(lc => lc.Ingrediente).AsEnumerable())
+                                                                ValorTotal = m.ValorTotal,
+                                                                Promocao = m.Promocao,
+                                                                Desconto = m.Desconto,
+                                                                Ingredientes = Mapper.Map<IEnumerable<Ingrediente>, 
+                                                                                          IEnumerable<IngredienteViewModel>>(m.LanchesCustomizados.Select(lc => lc.Ingrediente)
+                                                                                                                                                  .AsEnumerable())
                                                             })
                                                          ));
         }

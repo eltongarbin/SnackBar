@@ -128,13 +128,15 @@ namespace SnackBar.Infra.Data.Repository
 
         public override Pedido ObterPorId(Guid id)
         {
-            return DbSet.AsNoTracking()
-                .Include(p => p.PedidosLanches)
-                    .ThenInclude(l => l.Lanche)
-                .Include(p => p.PedidosLanches)
-                    .ThenInclude(pl => pl.LanchesCustomizados)
-                        .ThenInclude(lc => lc.Ingrediente)
-                .FirstOrDefault(t => t.Id == id);
+            var pedido = DbSet.AsNoTracking()
+                                .Include(p => p.PedidosLanches)
+                                    .ThenInclude(l => l.Lanche)
+                                .Include(p => p.PedidosLanches)
+                                    .ThenInclude(pl => pl.LanchesCustomizados)
+                                    .ThenInclude(lc => lc.Ingrediente)
+                                .FirstOrDefault(t => t.Id == id);
+
+            return pedido;
         }
     }
 }
