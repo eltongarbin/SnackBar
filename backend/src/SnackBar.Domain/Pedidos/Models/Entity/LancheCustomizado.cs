@@ -1,6 +1,6 @@
-﻿using System;
-using SnackBar.Domain.Core.Models;
+﻿using SnackBar.Domain.Core.Models;
 using SnackBar.Domain.Ingredientes;
+using System;
 
 namespace SnackBar.Domain.Pedidos.Models.Entity
 {
@@ -15,10 +15,26 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
         // Culpa do EF
         protected LancheCustomizado() { }
 
+        public LancheCustomizado(Guid id,
+                                 Guid pedidoLancheId,
+                                 Guid ingredienteLancheId)
+        {
+            Id = id;
+            PedidoLancheId = pedidoLancheId;
+            IngredienteId = ingredienteLancheId;
+        }
+
         // Validações
         public override bool IsValid()
         {
-            return true;
+            ValidationResult = Validate(this);
+
+            foreach (var error in Ingrediente.ValidationResult.Errors)
+            {
+                ValidationResult.Errors.Add(error);
+            }
+
+            return ValidationResult.IsValid;
         }
     }
 }

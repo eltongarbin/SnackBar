@@ -80,7 +80,7 @@ namespace SnackBar.Infra.Data.Repository
                     if (pedido.PedidosLanches == null)
                         pedido.PedidosLanches = new List<PedidoLanche>();
 
-                    pedido.PedidosLanches.Add(new PedidoLanche(pedido, l));
+                    pedido.PedidosLanches.Add(PedidoLanche.PedidoLancheFactory.Criar(pedido, l));
 
                     return pedido;
                 }

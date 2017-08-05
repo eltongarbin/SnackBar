@@ -6,6 +6,7 @@ using SnackBar.Domain.Core.Bus;
 using SnackBar.Domain.Core.Notifications;
 using SnackBar.Domain.Pedidos.Repository;
 using System.Collections.Generic;
+using SnackBar.Domain.Pedidos.Commands;
 
 namespace SnackBar.Api.Controllers
 {
@@ -40,6 +41,15 @@ namespace SnackBar.Api.Controllers
             return _mapper.Map<DetalhePedidoViewModel>(_pedidoRepository.ObterPorId(id));
         }
 
+        [HttpPost]
+        [Route("pedidos")]
+        public IActionResult Post([FromBody] DetalhePedidoViewModel eventoViewModel)
+        {
+            var pedidoCommand = _mapper.Map<RealizarPedidoCommand>(eventoViewModel);
+            _bus.SendCommand(pedidoCommand);
+
+            return Response(pedidoCommand);
+        }
 
         [HttpGet]
         [Route("pedidos/ingredientes")]

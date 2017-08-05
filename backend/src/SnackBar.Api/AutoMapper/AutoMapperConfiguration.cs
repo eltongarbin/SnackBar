@@ -9,6 +9,7 @@ namespace SnackBar.Api.AutoMapper
             return new MapperConfiguration(ps =>
             {
                 ps.AddProfile(new DomainToViewModelMappingProfile());
+                ps.AddProfile(new ViewModelToDomainMappingProfile());
             });
         }
     }

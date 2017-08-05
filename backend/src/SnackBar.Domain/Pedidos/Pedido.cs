@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using SnackBar.Domain.Core.Models;
 using SnackBar.Domain.Pedidos.Models.Entity;
 using System;
@@ -21,50 +20,15 @@ namespace SnackBar.Domain.Pedidos
         // Culpa do EF
         protected Pedido() { }
 
-        public Pedido(string cliente,
-                      ICollection<PedidoLanche> pedidoLanches)
+        public Pedido(Guid id,
+                      DateTime dataPedido,
+                      string cliente,
+                      ICollection<PedidoLanche> pedidosLanches)
         {
-            Id = Guid.NewGuid();
-            DataPedido = DateTime.Now;
+            Id = id;
+            DataPedido = dataPedido;
             Cliente = cliente;
-            PedidosLanches = pedidoLanches;
-        }
-
-        public void RealizarPedidoLanche(PedidoLanche pedidoLanche)
-        {
-            if (!pedidoLanche.IsValid())
-            {
-                foreach (var error in pedidoLanche.ValidationResult.Errors)
-                {
-                    ValidationResult.Errors.Add(error);
-                }
-            }
-                
-            PedidosLanches.Add(pedidoLanche);
-        }
-
-        public void ExcluirPedidoLanche(Guid pedidoLancheId)
-        {
-            if (PedidosLanches.All(x => x.Id != pedidoLancheId))
-                ValidationResult.Errors.Add(new ValidationFailure("ExcluirPedidoLanche", "Pedido a ser removido não localizado."));
-
-            var pedidoLanche = PedidosLanches.Single(x => x.Id == pedidoLancheId);
-
-            PedidosLanches.Remove(pedidoLanche);
-        }
-
-        public void AtualizarPedidoLanche(PedidoLanche pedidoLanche)
-        {
-            if (!pedidoLanche.IsValid())
-            {
-                foreach (var error in pedidoLanche.ValidationResult.Errors)
-                {
-                    ValidationResult.Errors.Add(error);
-                }
-            }
-
-            ExcluirPedidoLanche(pedidoLanche.Id);
-            RealizarPedidoLanche(pedidoLanche);
+            PedidosLanches = pedidosLanches;
         }
 
         public void EntregarPedido()
@@ -99,26 +63,15 @@ namespace SnackBar.Domain.Pedidos
 
         public static class PedidoFactory
         {
-            public static Pedido CriarPedido(Guid id,
-                                             string cliente,
-                                             DateTime dataPedido,
-                                             DateTime? dataEntrega,
-                                             DateTime? dataCancelamento,
-                                             ICollection<PedidoLanche> pedidoLanches)
+            public static Pedido Criar(string cliente)
             {
                 var pedido = new Pedido()
                 {
-                    Id = id,
+                    Id = Guid.NewGuid(),
                     Cliente = cliente,
-                    DataPedido = dataPedido,
-                    PedidosLanches = pedidoLanches
+                    DataPedido = DateTime.Now,
+                    PedidosLanches = new List<PedidoLanche>()
                 };
-
-                if (dataEntrega.HasValue)
-                    pedido.DataEntrega = dataEntrega;
-
-                if (dataCancelamento.HasValue)
-                    pedido.DataCancelamento = dataCancelamento;
 
                 return pedido;
             }

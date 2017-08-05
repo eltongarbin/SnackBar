@@ -19,20 +19,64 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
         // Culpa do EF
         protected PedidoLanche() { }
 
-        public PedidoLanche(Pedido pedido,
-                            Lanche lanche)
+        public PedidoLanche(Guid id,
+                            Guid pedidoId,
+                            Guid lancheId,
+                            ICollection<LancheCustomizado> lanchesCustomizados)
         {
-            Id = Guid.NewGuid();
-            PedidoId = pedido.Id;
-            LancheId = lanche.Id;
-            Pedido = pedido;
-            Lanche = lanche;
+            Id = id;
+            PedidoId = pedidoId;
+            LancheId = lancheId;
+            LanchesCustomizados = lanchesCustomizados;
         }
 
         // Validações
         public override bool IsValid()
         {
-            return true;
+            ValidationResult = Validate(this);
+
+            foreach (var pedidoLanche in LanchesCustomizados)
+            {
+                foreach (var error in pedidoLanche.ValidationResult.Errors)
+                {
+                    ValidationResult.Errors.Add(error);
+                }
+            }
+
+            return ValidationResult.IsValid;
+        }
+
+        public static class PedidoLancheFactory
+        {
+            public static PedidoLanche Criar(Guid pedidoId,
+                                             Guid lancheId)
+            {
+                var pedidoLanche = new PedidoLanche()
+                {
+                    Id = Guid.NewGuid(),
+                    PedidoId = pedidoId,
+                    LancheId = lancheId,
+                    LanchesCustomizados = new List<LancheCustomizado>()
+                };
+
+                return pedidoLanche;
+            }
+
+            public static PedidoLanche Criar(Pedido pedido,
+                                             Lanche lanche)
+            {
+                var pedidoLanche = new PedidoLanche()
+                {
+                    Id = Guid.NewGuid(),
+                    PedidoId = pedido.Id,
+                    LancheId = lanche.Id,
+                    Pedido = pedido,
+                    Lanche = lanche,
+                    LanchesCustomizados = new List<LancheCustomizado>()
+                };
+
+                return pedidoLanche;
+            }
         }
     }
 }
