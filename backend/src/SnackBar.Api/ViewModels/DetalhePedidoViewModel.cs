@@ -13,5 +13,12 @@ namespace SnackBar.Api.ViewModels
         public decimal ValorTotal { get; set; }
 
         public IEnumerable<LancheViewModel> Lanches { get; set; }
+
+        public DetalhePedidoViewModel()
+        {
+            Id = Guid.NewGuid();
+            DataPedido = DateTime.Now;
+            Lanches = new List<LancheViewModel>();
+        }
     }
 }

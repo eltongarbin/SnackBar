@@ -14,7 +14,7 @@ namespace SnackBar.Api.AutoMapper
                 .ConstructUsing(c => new RealizarPedidoCommand(
                         c.Cliente,
                         c.Lanches.Select(l => new IncluirPedidoLancheCommand(
-                                l.Id,
+                                c.Id,
                                 l.Id,
                                 l.Ingredientes.Select(i => new Ingrediente(i.Id, i.Nome, i.Valor))
                             )

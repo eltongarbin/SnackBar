@@ -10,5 +10,11 @@ namespace SnackBar.Api.ViewModels
         public decimal Valor { get; set; }
 
         public IEnumerable<IngredienteViewModel> Ingredientes { get; set; }
+
+        public LancheViewModel()
+        {
+            Id = Guid.NewGuid();
+            Ingredientes = new List<IngredienteViewModel>();
+        }
     }
 }

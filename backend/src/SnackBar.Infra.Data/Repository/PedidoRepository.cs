@@ -56,6 +56,43 @@ namespace SnackBar.Infra.Data.Repository
             return lookup.Values.ToList();
         }
 
+        public Lanche ObterLancheCardapioPorId(Guid id)
+        {
+            var sql = @"SELECT Lanches.*,
+                               Ingredientes.*
+                        FROM Lanches
+                             INNER JOIN LanchesPredefinidos
+                             ON LanchesPredefinidos.LancheId = Lanches.Id
+                             INNER JOIN Ingredientes
+                             ON Ingredientes.Id = LanchesPredefinidos.IngredienteId
+                        WHERE Lanches.Id = @uid";
+
+            var lanche = Db.Database.GetDbConnection().Query<Lanche, Ingrediente, Lanche>(sql,
+                (l, i) =>
+                {
+                    if (l.LanchesPredefinidos == null)
+                        l.LanchesPredefinidos = new List<LanchePredefinido>();
+
+                    l.LanchesPredefinidos.Add(new LanchePredefinido(l, i));
+
+                    return l;
+                },
+                new { uid = id }
+            ).AsQueryable();
+
+            return lanche.FirstOrDefault();
+        }
+
+        public Ingrediente ObterIngredientePorId(Guid id)
+        {
+            var sql = @"SELECT * FROM Ingredientes 
+                        WHERE Id = @uid";
+
+            var ingrediente = Db.Database.GetDbConnection().Query<Ingrediente>(sql, new { uid = id });
+
+            return ingrediente.SingleOrDefault();
+        }
+
         public override IEnumerable<Pedido> ObterTodos()
         {
             var sql = @"SELECT Pedidos.*,

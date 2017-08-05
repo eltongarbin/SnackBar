@@ -2,6 +2,7 @@
 using SnackBar.Domain.Lanches;
 using System;
 using System.Collections.Generic;
+using FluentValidation;
 
 namespace SnackBar.Domain.Pedidos.Models.Entity
 {
@@ -33,6 +34,11 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
         // Validações
         public override bool IsValid()
         {
+            RuleFor(e => e.LanchesCustomizados)
+                .NotNull()
+                .Must(e => e.Count > 0)
+                .WithMessage("Precisa ser fornecido a composição do lanche.");
+
             ValidationResult = Validate(this);
 
             foreach (var pedidoLanche in LanchesCustomizados)

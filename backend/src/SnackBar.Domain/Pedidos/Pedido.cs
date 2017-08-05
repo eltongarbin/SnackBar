@@ -48,17 +48,31 @@ namespace SnackBar.Domain.Pedidos
                 .NotEmpty().WithMessage("O nome do cliente precisa ser fornecido.")
                 .Length(4, 150).WithMessage("O nome do cliente precisa ter entre 4 e 150 caracteres.");
 
+            RuleFor(e => e.PedidosLanches)
+                .NotNull()
+                .Must(e => e.Count > 0)
+                .WithMessage("Precisa ser fornecido ao menos um lanche para o pedido.");
+
             ValidationResult = Validate(this);
 
+            ValidarPedidosLanches();
+
+            return ValidationResult.IsValid;
+        }
+
+        private void ValidarPedidosLanches()
+        {
             foreach (var pedidoLanche in PedidosLanches)
             {
+                if (pedidoLanche.IsValid())
+                    continue;
+
                 foreach (var error in pedidoLanche.ValidationResult.Errors)
                 {
                     ValidationResult.Errors.Add(error);
                 }
             }
 
-            return ValidationResult.IsValid;
         }
 
         public static class PedidoFactory
