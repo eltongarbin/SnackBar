@@ -18,6 +18,7 @@ import { MainPrincipalComponent } from './shared/main-principal/main-principal.c
 // components
 import { AppComponent } from './app.component';
 import { ListaPedidosComponent } from "./pedidos/lista-pedidos/lista-pedidos.component";
+import { CardapioComponent } from "./pedidos/cardapio/cardapio.component";
 
 // services
 import { PedidoService } from "./pedidos/service/pedido.service";
@@ -30,7 +31,8 @@ import { rootRouterConfig } from './app.routes';
     AppComponent,
     MenuSuperiorComponent,
     MainPrincipalComponent,
-    ListaPedidosComponent
+    ListaPedidosComponent,
+    CardapioComponent
   ],
   imports: [
     BrowserModule,

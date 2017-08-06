@@ -1,0 +1,24 @@
+<div class="container main-container">
+    <h2>Lanches disponíveis no cardápio</h2>
+    <br>
+
+    <div class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="page-size">
+        <div class="col-sm-6" *ngFor="let lanche of lanches">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ lanche.nome }}</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let ingrediente of lanche.ingredientes">{{ ingrediente.nome }}</li>
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    {{ lanche.valorTotal | currency:'BRL':true:'1.2-2' }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,4 +22,10 @@ export class PedidoService extends ServiceBase {
             .map((res: Response) => <Pedido[]>res.json())
             .catch(super.serviceError);
     }
+
+    ObterLanchesCardapio(): Observable<Lanche[]> {
+        return this.http.get(this.UrlServiceV1 + 'pedidos/lanches-cardapio')
+            .map((res: Response) => <Lanche[]>res.json())
+            .catch(super.serviceError);
+    }
 }

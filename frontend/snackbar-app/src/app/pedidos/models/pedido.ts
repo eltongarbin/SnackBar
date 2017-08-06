@@ -7,11 +7,11 @@ export class Ingrediente {
 export class Lanche {
     id: string;
     nome: string;
-    valorTotal: string;
+    valorTotal: number;
     promocao: string;
-    desconto: string;
+    desconto: number;
 
-    Ingredientes: Ingrediente[];
+    ingredientes: Ingrediente[];
 }
 
 export class Pedido {
