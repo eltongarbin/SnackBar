@@ -13,12 +13,14 @@ import { ToastModule, ToastOptions } from 'ng2-toastr';
 
 // shared components
 import { MenuSuperiorComponent } from './shared/menu-superior/menu-superior.component';
-import { FooterComponent } from './shared/footer/footer.component';
 import { MainPrincipalComponent } from './shared/main-principal/main-principal.component';
 
 // components
 import { AppComponent } from './app.component';
 import { ListaPedidosComponent } from "./pedidos/lista-pedidos/lista-pedidos.component";
+
+// services
+import { PedidoService } from "./pedidos/service/pedido.service";
 
 // others
 import { rootRouterConfig } from './app.routes';
@@ -27,7 +29,6 @@ import { rootRouterConfig } from './app.routes';
   declarations: [
     AppComponent,
     MenuSuperiorComponent,
-    FooterComponent,
     MainPrincipalComponent,
     ListaPedidosComponent
   ],
@@ -40,7 +41,9 @@ import { rootRouterConfig } from './app.routes';
     CollapseModule.forRoot(),
     RouterModule.forRoot(rootRouterConfig, { useHash: false })
   ],
-  providers: [],
+  providers: [
+    PedidoService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

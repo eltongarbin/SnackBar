@@ -11,4 +11,41 @@
         </div>
     </div>
     <br>
+
+    <div class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="page-size">
+        <div class="panel panel-default">
+            <table class="table table-striped" *ngIf="pedidos && pedidos.length">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th class="text-center">Qt. Lanches</th>
+                        <th class="text-right">Valor Total</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Data Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pedido of pedidos">
+                        <td>{{ pedido.cliente }}</td>
+                        <td class="text-center">{{ pedido.qtLanches }}</td>
+                        <td class="text-right">{{ pedido.valorTotal | currency:'BRL':true:'1.2-2' }}</td>
+                        <td class="text-center">{{ pedido.status }}</td>
+                        <td class="text-center">{{ pedido.dataStatus | date:'dd/MM/yyyy' }}</td>
+
+                        <td class="text-right">
+                            <a [routerLink]="['/detalhes-pedido', pedido.id]" title="Detalhes" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </a>
+                            <a [routerLink]="['/editar-pedido', pedido.id]" title="Editar" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

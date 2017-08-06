@@ -31,19 +31,29 @@ namespace SnackBar.Domain.Pedidos
             PedidosLanches = pedidosLanches;
         }
 
-        public void EntregarPedido()
-        {
-            DataEntrega = DateTime.Now;
-        }
-
-        public void CancelarPedido()
-        {
-            DataCancelamento = DateTime.Now;
-        }
-
         public void CalcularValorTotal()
         {
             ValorTotal = PedidosLanches.Sum(pl => pl.ValorTotal);
+        }
+
+        public string ObterStatus()
+        {
+            if (DataCancelamento.HasValue)
+                return "CANCELADO";
+            if (DataEntrega.HasValue)
+                return "ENTREGUE";
+
+            return "EM ANDAMENTO";
+        }
+
+        public DateTime ObterDataStatus()
+        {
+            if (DataCancelamento.HasValue)
+                return (DateTime)DataCancelamento;
+            if (DataEntrega.HasValue)
+                return (DateTime)DataEntrega;
+
+            return DataPedido;
         }
 
         // Validações
