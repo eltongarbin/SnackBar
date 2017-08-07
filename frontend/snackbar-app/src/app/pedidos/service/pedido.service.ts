@@ -23,9 +23,21 @@ export class PedidoService extends ServiceBase {
             .catch(super.serviceError);
     }
 
-    ObterLanchesCardapio(): Observable<Lanche[]> {
+    obterPedido(id: string): Observable<Pedido> {
+        return this.http.get(this.UrlServiceV1 + 'pedidos/' + id)
+            .map((res: Response) => <Pedido[]>res.json())
+            .catch(super.serviceError);
+    }
+
+    obterLanchesCardapio(): Observable<Lanche[]> {
         return this.http.get(this.UrlServiceV1 + 'pedidos/lanches-cardapio')
             .map((res: Response) => <Lanche[]>res.json())
+            .catch(super.serviceError);
+    }
+
+    obterIngredientes(): Observable<Ingrediente[]> {
+        return this.http.get(this.UrlServiceV1 + 'pedidos/ingredientes')
+            .map((res: Response) => <Ingrediente[]>res.json())
             .catch(super.serviceError);
     }
 }

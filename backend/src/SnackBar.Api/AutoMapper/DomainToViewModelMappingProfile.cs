@@ -24,6 +24,8 @@ namespace SnackBar.Api.AutoMapper
                 .ForMember(d => d.DataStatus, o => o.MapFrom(s => s.ObterDataStatus()));
 
             CreateMap<Pedido, DetalhePedidoViewModel>()
+                .ForMember(d => d.Status, o => o.MapFrom(s => s.ObterStatus()))
+                .ForMember(d => d.DataStatus, o => o.MapFrom(s => s.ObterDataStatus()))
                 .ForMember(d => d.Lanches, o => o.MapFrom(s =>
                                                             s.PedidosLanches.Select(m => new LancheViewModel
                                                             {

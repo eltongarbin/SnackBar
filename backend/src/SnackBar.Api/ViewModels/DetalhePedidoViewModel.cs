@@ -11,6 +11,8 @@ namespace SnackBar.Api.ViewModels
         public DateTime? DataCancelamento { get; set; }
         public DateTime? DataEntrega { get; set; }
         public decimal ValorTotal { get; set; }
+        public string Status { get; set; }
+        public DateTime DataStatus { get; set; }
 
         public IEnumerable<LancheViewModel> Lanches { get; set; }
 

@@ -1,0 +1,67 @@
+<div class="container main-container">
+    <h2>Detalhes do Pedido</h2>
+    <hr />
+
+    <div class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="row-fluid">
+        <div class="col-xs-12 form-group">
+            <label for="exampleInputEmail1">Cliente</label>
+            <p class="form-control-static">{{ pedido.cliente }}</p>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="col-sm-3 form-group">
+            <label for="exampleInputEmail1">Valor Total</label>
+            <p class="form-control-static">{{ pedido.valorTotal | currency:'BRL':true:'1.2-2' }}</p>
+        </div>
+
+        <div class="col-sm-3 form-group">
+            <label for="exampleInputEmail1">Status</label>
+            <p class="form-control-static">{{ pedido.status }}</p>
+        </div>
+
+        <div class="col-sm-3 form-group">
+            <label for="exampleInputEmail1">Data Status</label>
+            <p class="form-control-static">{{ pedido.dataStatus | date:'dd/MM/yyyy' }}</p>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-striped" *ngIf="pedido.lanches && pedido.lanches.length">
+                    <thead>
+                        <tr>
+                            <th>Lanche</th>
+                            <th class="text-right">Valor</th>
+                            <th>Ingredientes</th>
+                            <th class="text-center">Promoção</th>
+                            <th class="text-right">Desconto Aplicado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let lanche of pedido.lanches">
+                            <td>{{ lanche.nome }}</td>
+                            <td class="text-right">{{ lanche.valorTotal | currency:'BRL':true:'1.2-2' }}</td>
+                            <td>
+                                <small *ngFor="let ingrediente of lanche.ingredientes">{{ ingrediente.nome }}/</small>
+                            </td>
+                            <td class="text-center">{{ lanche.promocao ? lanche.promocao : 'Nenhuma' }}</td>
+                            <td class="text-right">{{ lanche.desconto | currency:'BRL':true:'1.2-2' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="col-sm-2 col-md-1">
+            <a [routerLink]="['/lista-pedidos']" title="Voltar" class="btn btn-default">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+        </div>
+    </div>
+</div>

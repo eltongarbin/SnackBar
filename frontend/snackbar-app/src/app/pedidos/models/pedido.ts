@@ -11,7 +11,7 @@ export class Lanche {
     promocao: string;
     desconto: number;
 
-    ingredientes: Ingrediente[];
+    ingredientes: Ingrediente[] = [];
 }
 
 export class Pedido {
@@ -21,4 +21,6 @@ export class Pedido {
     qtLanches: number;
     status: string;
     dataStatus: Date;
+
+    lanches: Lanche[] = [];
 }

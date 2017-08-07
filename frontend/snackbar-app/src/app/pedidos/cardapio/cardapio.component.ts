@@ -15,7 +15,7 @@ export class CardapioComponent {
     constructor(private pedidoService: PedidoService) { }
 
     ngOnInit(): void {
-        this.pedidoService.ObterLanchesCardapio().subscribe(
+        this.pedidoService.obterLanchesCardapio().subscribe(
             lanches => this.lanches = lanches,
             error => this.errorMessage
         );
