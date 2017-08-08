@@ -1,0 +1,73 @@
+<div class="container main-container">
+    <h2>Novo Pedido</h2>
+    <h4>Preencha corretamente os dados</h4>
+    <hr />
+
+    <form novalidate (ngSubmit)="submit()" [formGroup]="pedidoForm" class="col-sm-offset-2 col-sm-8">
+        <div class="form-group" *ngIf="errors.length > 0">
+            <div class="alert alert-danger">
+                <h3 id="msgRetorno">Opa! Alguma coisa não deu certo:</h3>
+                <ul>
+                    <li *ngFor="let error of errors">{{ error }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <input type="text" class="form-control" id="cliente" placeholder="Nome (requerido)" formControlName="cliente" />
+        </div>
+
+        <div class="form-group">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Lanche</th>
+                            <th>Ingredientes</th>
+                            <th class="text-right">
+                                <button type="button" class="btn btn-info btn-xs" aria-label="Left Align" (click)="showModal()">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let lanche of lanches; let i=index">
+                            <td>{{ lanche.nome }}</td>
+                            <td>
+                                <small *ngFor="let ingrediente of lanche.ingredientes">{{ ingrediente.nome }}/</small>
+                            </td>
+                            <td class="text-right">
+                                <button type="button" class="btn btn-default btn-xs" aria-label="Left Align" (click)="excluirLancheEscolhido(i)">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit" [disabled]='!pedidoForm.valid'>Confirmar</button>
+        </div>
+    </form>
+
+    <div id="myModal" class="modal fade in" [ngStyle]="{'display': modalVisible ? 'block': 'none'}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" (click)="hideModal()" type="button" data-dismiss="modal">
+                        <span aria-hidden="true">x</span><span class="sr-only">Fechar</span>
+                    </button>
+                    <h4 class="modal-title">Escolher Lanche</h4>
+                </div>
+
+                <div class="modal-body">
+                    <app-escolher-lanche (onLancheEscolhido)="salvarLancheEscolhido($event)"></app-escolher-lanche>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

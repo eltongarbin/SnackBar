@@ -40,4 +40,12 @@ export class PedidoService extends ServiceBase {
             .map((res: Response) => <Ingrediente[]>res.json())
             .catch(super.serviceError);
     }
+
+    realizarPedido(pedido: Pedido): Observable<Pedido> {
+        pedido.id = undefined;
+
+        return this.http.post(this.UrlServiceV1 + 'pedidos', pedido)
+            .map(this.extractData)
+            .catch(super.serviceError)
+    }    
 }

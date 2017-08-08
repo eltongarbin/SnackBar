@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ng2-bootstrap/collapse';
 
 // imports
-import { ToastModule, ToastOptions } from 'ng2-toastr';
+import { ToastModule, ToastOptions } from 'ng2-toastr/ng2-toastr';
 
 // shared components
 import { MenuSuperiorComponent } from './shared/menu-superior/menu-superior.component';
@@ -19,10 +19,13 @@ import { MainPrincipalComponent } from './shared/main-principal/main-principal.c
 import { AppComponent } from './app.component';
 import { ListaPedidosComponent } from "./pedidos/lista-pedidos/lista-pedidos.component";
 import { CardapioComponent } from "./pedidos/cardapio/cardapio.component";
+import { AdicionarPedidoComponent } from "./pedidos/adicionar-pedido/adicionar-pedido.component";
+import { EscolherLancheComponent } from "./pedidos/escolher-lanche/escolher-lanche.component";
 import { DetalhesPedidoComponent } from "./pedidos/detalhes-pedido/detalhes-pedido.component";
 
 // services
 import { PedidoService } from "./pedidos/service/pedido.service";
+import { ToastrCustomOption } from "./utils/ToastrCustomOptions";
 
 // others
 import { rootRouterConfig } from './app.routes';
@@ -34,6 +37,8 @@ import { rootRouterConfig } from './app.routes';
     MainPrincipalComponent,
     ListaPedidosComponent,
     CardapioComponent,
+    AdicionarPedidoComponent,
+    EscolherLancheComponent,
     DetalhesPedidoComponent
   ],
   imports: [
@@ -46,7 +51,8 @@ import { rootRouterConfig } from './app.routes';
     RouterModule.forRoot(rootRouterConfig, { useHash: false })
   ],
   providers: [
-    PedidoService
+    PedidoService,
+    { provide: ToastOptions, useClass: ToastrCustomOption }
   ],
   bootstrap: [AppComponent]
 })

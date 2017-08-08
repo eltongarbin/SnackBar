@@ -55,7 +55,7 @@ namespace SnackBar.Domain.Pedidos.Models.Entity
                 .WithMessage("Precisa ser fornecido a composição do lanche.");
 
             RuleFor(e => e.Promocao)
-                .Length(2, 20).WithMessage("O nome da promoção precisa ter entre 2 e 20 caracteres.");
+                .MaximumLength(20).WithMessage("O nome da promoção precisa ter no máximo 20 caracteres.");
 
             ValidationResult = Validate(this);
 

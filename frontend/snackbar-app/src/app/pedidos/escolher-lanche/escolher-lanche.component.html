@@ -1,0 +1,37 @@
+<form novalidate (ngSubmit)="submit()" [formGroup]="lancheForm">
+    <div class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="form-group">
+        <label>Lanche</label>
+        <select class="form-control" formControlName="id" id="id">
+            <option *ngFor="let lanche of lanches" value="{{lanche.id}}" >{{ lanche.nome }}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="lancheForm.controls.id.valid">
+        <div class="form-group">
+            <label>Ingredientes</label>
+            <a class="btn btn-default" (click)="adicionarIngrediente('')">
+                <span title="Novo Pedido" class="glyphicon glyphicon-plus-sign"></span>
+            </a>
+        </div>
+        <div class="form-group" formArrayName="ingredientes">
+            <div *ngFor="let ingrediente of lancheForm.controls.ingredientes.controls; let i=index" class="panel panel-default">
+                <div class="input-group" [formGroupName]="i" [formGroup]="ingrediente">
+                    <select class="form-control" formControlName="id" id="id">
+                        <option *ngFor="let ingrediente of ingredientes" value="{{ingrediente.id}}" >{{ ingrediente.nome }}</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" aria-label="Left Align" (click)="removerIngrediente(i)">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit" [disabled]='!lancheForm.valid'>Confirmar</button>
+    </div>
+</form>
