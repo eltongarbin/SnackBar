@@ -22,6 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnackBar.Infra.CrossCutting
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4F1A83F4-C97B-4919-A6A2-F887567F9DBD}"
 	ProjectSection(SolutionItems) = preProject
+		docs\Instruções.docx = docs\Instruções.docx
 		docs\Requisitos.docx = docs\Requisitos.docx
 	EndProjectSection
 EndProject
