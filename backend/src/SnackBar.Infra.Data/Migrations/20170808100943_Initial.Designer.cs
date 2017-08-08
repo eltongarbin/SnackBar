@@ -8,8 +8,8 @@ using SnackBar.Infra.Data.Context;
 namespace SnackBar.Infra.Data.Migrations
 {
     [DbContext(typeof(SnackBarContext))]
-    [Migration("20170803003658_ValorLanche")]
-    partial class ValorLanche
+    [Migration("20170808100943_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,11 +90,16 @@ namespace SnackBar.Infra.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<decimal>("Desconto");
+
                     b.Property<Guid>("LancheId");
 
                     b.Property<Guid>("PedidoId");
 
-                    b.Property<decimal>("Valor");
+                    b.Property<string>("Promocao")
+                        .HasMaxLength(20);
+
+                    b.Property<decimal>("ValorTotal");
 
                     b.HasKey("Id");
 
@@ -120,7 +125,7 @@ namespace SnackBar.Infra.Data.Migrations
 
                     b.Property<DateTime>("DataPedido");
 
-                    b.Property<decimal>("Valor");
+                    b.Property<decimal>("ValorTotal");
 
                     b.HasKey("Id");
 

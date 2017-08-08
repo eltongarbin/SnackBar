@@ -26,7 +26,8 @@ namespace SnackBar.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nome = table.Column<string>(maxLength: 20, nullable: false)
+                    Nome = table.Column<string>(maxLength: 20, nullable: false),
+                    Valor = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +43,7 @@ namespace SnackBar.Infra.Data.Migrations
                     DataCancelamento = table.Column<DateTime>(nullable: true),
                     DataEntrega = table.Column<DateTime>(nullable: true),
                     DataPedido = table.Column<DateTime>(nullable: false),
-                    Valor = table.Column<decimal>(nullable: false)
+                    ValorTotal = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,9 +80,11 @@ namespace SnackBar.Infra.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    Desconto = table.Column<decimal>(nullable: false),
                     LancheId = table.Column<Guid>(nullable: false),
                     PedidoId = table.Column<Guid>(nullable: false),
-                    Valor = table.Column<decimal>(nullable: false)
+                    Promocao = table.Column<string>(maxLength: 20, nullable: true),
+                    ValorTotal = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
