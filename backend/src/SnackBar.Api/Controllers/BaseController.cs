@@ -1,21 +1,22 @@
-﻿using System.Linq;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SnackBar.Domain.Core.Bus;
 using SnackBar.Domain.Core.Notifications;
+using SnackBar.Domain.Interfaces;
+using System.Linq;
 
 namespace SnackBar.Api.Controllers
 {
     [Produces("application/json")]
     public abstract class BaseController : Controller
     {
-        private readonly IDomainNotificationHandler<DomainNotification> _notifications;
-        private readonly IBus _bus;
+        private readonly DomainNotificationHandler _notifications;
+        private readonly IMediatorHandler _mediator;
 
-        protected BaseController(IDomainNotificationHandler<DomainNotification> notifications,
-            IBus bus)
+        protected BaseController(INotificationHandler<DomainNotification> notifications,
+                                 IMediatorHandler mediator)
         {
-            _notifications = notifications;
-            _bus = bus;
+            _notifications = (DomainNotificationHandler)notifications;
+            _mediator = mediator;
         }
 
         protected new IActionResult Response(object result = null)
@@ -53,7 +54,7 @@ namespace SnackBar.Api.Controllers
 
         protected void NotificarErro(string codigo, string mensagem)
         {
-            _bus.RaiseEvent(new DomainNotification(codigo, mensagem));
+            _mediator.PublicarEvento(new DomainNotification(codigo, mensagem));
         }
     }
 }

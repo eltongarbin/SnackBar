@@ -1,31 +1,30 @@
-﻿using SnackBar.Domain.CommandHandlers;
-using SnackBar.Domain.Core.Bus;
-using SnackBar.Domain.Core.Events;
+﻿using MediatR;
 using SnackBar.Domain.Core.Notifications;
+using SnackBar.Domain.Handlers;
 using SnackBar.Domain.Interfaces;
 using SnackBar.Domain.Pedidos.Events;
 using SnackBar.Domain.Pedidos.Models.Entity;
+using SnackBar.Domain.Pedidos.Models.Logic.Desconto;
 using SnackBar.Domain.Pedidos.Repository;
 using System.Collections.Generic;
 using System.Linq;
-using SnackBar.Domain.Pedidos.Models.Logic.Desconto;
 
 namespace SnackBar.Domain.Pedidos.Commands
 {
     public class PedidoCommandHandler : CommandHandler,
-        IHandler<RealizarPedidoCommand>
+        INotificationHandler<RealizarPedidoCommand>
     {
         private readonly IPedidoRepository _pedidoRepository;
-        private readonly IBus _bus;
+        private readonly IMediatorHandler _mediator;
 
         public PedidoCommandHandler(IPedidoRepository pedidoRepository,
                                     IUnitOfWork uow,
-                                    IBus bus,
-                                    IDomainNotificationHandler<DomainNotification> notifications)
-            : base(uow, bus, notifications)
+                                    IMediatorHandler mediator,
+                                    INotificationHandler<DomainNotification> notifications)
+            : base(uow, mediator, notifications)
         {
             _pedidoRepository = pedidoRepository;
-            _bus = bus;
+            _mediator = mediator;
         }
 
         public void Handle(RealizarPedidoCommand message)
@@ -44,10 +43,10 @@ namespace SnackBar.Domain.Pedidos.Commands
 
             if (Commit())
             {
-                _bus.RaiseEvent(new PedidoRealizadoEvent(pedido.Id,
-                                                         pedido.Cliente,
-                                                         pedido.DataPedido,
-                                                         pedido.ValorTotal));
+                _mediator.PublicarEvento(new PedidoRealizadoEvent(pedido.Id,
+                                                                  pedido.Cliente,
+                                                                  pedido.DataPedido,
+                                                                  pedido.ValorTotal));
             }
         }
 
@@ -82,7 +81,7 @@ namespace SnackBar.Domain.Pedidos.Commands
                 var lanche = _pedidoRepository.ObterLancheCardapioPorId(command.LancheId);
                 if (lanche == null)
                 {
-                    _bus.RaiseEvent(new DomainNotification(command.MessageType, "Lanche não encontrado no cardápio."));
+                    _mediator.PublicarEvento(new DomainNotification(command.MessageType, "Lanche não encontrado no cardápio."));
                     return;
                 }
 
@@ -93,7 +92,7 @@ namespace SnackBar.Domain.Pedidos.Commands
                     var ingrediente = _pedidoRepository.ObterIngredientePorId(ingredienteId);
                     if (ingrediente == null)
                     {
-                        _bus.RaiseEvent(new DomainNotification(command.MessageType, "Ingrediente não encontrado."));
+                        _mediator.PublicarEvento(new DomainNotification(command.MessageType, "Ingrediente não encontrado."));
                         return;
                     }
 

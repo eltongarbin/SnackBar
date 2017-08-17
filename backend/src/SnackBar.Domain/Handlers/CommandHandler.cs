@@ -1,28 +1,30 @@
 ﻿using FluentValidation.Results;
-using SnackBar.Domain.Core.Bus;
+using MediatR;
 using SnackBar.Domain.Core.Notifications;
 using SnackBar.Domain.Interfaces;
 
-namespace SnackBar.Domain.CommandHandlers
+namespace SnackBar.Domain.Handlers
 {
     public abstract class CommandHandler
     {
         private readonly IUnitOfWork _uow;
-        private readonly IBus _bus;
-        private readonly IDomainNotificationHandler<DomainNotification> _notifications;
+        private readonly IMediatorHandler _mediator;
+        private readonly DomainNotificationHandler _notifications;
 
-        protected CommandHandler(IUnitOfWork uow, IBus bus, IDomainNotificationHandler<DomainNotification> notifications)
+        protected CommandHandler(IUnitOfWork uow,
+                                 IMediatorHandler mediator,
+                                 INotificationHandler<DomainNotification> notifications)
         {
             _uow = uow;
-            _bus = bus;
-            _notifications = notifications;
+            _mediator = mediator;
+            _notifications = (DomainNotificationHandler)notifications;
         }
 
         protected void NotificarValidacoesErro(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
             {
-                _bus.RaiseEvent(new DomainNotification(error.PropertyName, error.ErrorMessage));
+                _mediator.PublicarEvento(new DomainNotification(error.PropertyName, error.ErrorMessage));
             }
         }
 
@@ -35,7 +37,7 @@ namespace SnackBar.Domain.CommandHandlers
             if (commandResponse.Success)
                 return true;
 
-            _bus.RaiseEvent(new DomainNotification("Commit", "Ocorreu um erro ao salvar os dados no banco"));
+            _mediator.PublicarEvento(new DomainNotification("Commit", "Ocorreu um erro ao salvar os dados no banco"));
             return false;
         }
     }

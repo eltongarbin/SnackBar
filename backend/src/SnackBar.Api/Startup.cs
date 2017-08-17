@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SnackBar.Api.Configurations;
 using SnackBar.Api.Middlewares;
-using SnackBar.Infra.CrossCutting.Bus;
 using SnackBar.Infra.CrossCutting.IoC;
 using SnackBar.Infra.Data.Context;
 using Swashbuckle.AspNetCore.Swagger;
@@ -37,7 +37,8 @@ namespace SnackBar.Api
             string sqlConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
             bool useInMemoryProvider = bool.Parse(Configuration["Data:SnackBarConnection:InMemoryProvider"]);
 
-            services.AddDbContext<SnackBarContext>(options => {
+            services.AddDbContext<SnackBarContext>(options =>
+            {
                 switch (useInMemoryProvider)
                 {
                     case true:
@@ -84,11 +85,13 @@ namespace SnackBar.Api
             services.AddSingleton(Mapper.Configuration);
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<IConfigurationProvider>(), sp.GetService));
 
+            services.AddMediatR(typeof(Startup));
+
             RegisterServices(services);
         }
 
-        public void Configure(IApplicationBuilder app, 
-                              IHostingEnvironment env, 
+        public void Configure(IApplicationBuilder app,
+                              IHostingEnvironment env,
                               ILoggerFactory loggerFactory,
                               IHttpContextAccessor accessor)
         {
@@ -113,8 +116,6 @@ namespace SnackBar.Api
             {
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "SnackBar API v1.0");
             });
-
-            InMemoryBus.ContainerAccessor = () => accessor.HttpContext.RequestServices;
         }
 
         private static void RegisterServices(IServiceCollection services)

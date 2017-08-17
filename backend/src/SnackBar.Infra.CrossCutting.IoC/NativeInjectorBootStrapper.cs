@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SnackBar.Domain.Core.Bus;
-using SnackBar.Domain.Core.Events;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using SnackBar.Domain.Core.Notifications;
+using SnackBar.Domain.Handlers;
 using SnackBar.Domain.Interfaces;
 using SnackBar.Domain.Pedidos.Commands;
 using SnackBar.Domain.Pedidos.Events;
 using SnackBar.Domain.Pedidos.Repository;
-using SnackBar.Infra.CrossCutting.Bus;
 using SnackBar.Infra.Data.Context;
 using SnackBar.Infra.Data.Repository;
 using SnackBar.Infra.Data.UoW;
@@ -18,12 +17,15 @@ namespace SnackBar.Infra.CrossCutting.IoC
         public static void RegisterServices(IServiceCollection services)
         {
             #region Domain
+            // Bus (Mediator)
+            services.AddScoped<IMediatorHandler, MediatorHandler>();
+
             // Commands
-            services.AddScoped<IHandler<RealizarPedidoCommand>, PedidoCommandHandler>();
+            services.AddScoped<INotificationHandler<RealizarPedidoCommand>, PedidoCommandHandler>();
 
             // Eventos
-            services.AddScoped<IDomainNotificationHandler<DomainNotification>, DomainNotificationHandler>();
-            services.AddScoped<IHandler<PedidoRealizadoEvent>, PedidoEventHandler>();
+            services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
+            services.AddScoped<INotificationHandler<PedidoRealizadoEvent>, PedidoEventHandler>();
             #endregion
 
             #region Infra
@@ -31,9 +33,6 @@ namespace SnackBar.Infra.CrossCutting.IoC
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<SnackBarContext>();
             services.AddScoped<IPedidoRepository, PedidoRepository>();
-
-            // Bus
-            services.AddScoped<IBus, InMemoryBus>();
             #endregion
         }
     }

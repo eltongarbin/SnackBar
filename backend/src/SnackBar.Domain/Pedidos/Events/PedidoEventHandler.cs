@@ -1,10 +1,10 @@
-﻿using System;
-using SnackBar.Domain.Core.Events;
+﻿using MediatR;
+using System;
 
 namespace SnackBar.Domain.Pedidos.Events
 {
     public class PedidoEventHandler :
-        IHandler<PedidoRealizadoEvent>
+        INotificationHandler<PedidoRealizadoEvent>
     {
         public void Handle(PedidoRealizadoEvent message)
         {

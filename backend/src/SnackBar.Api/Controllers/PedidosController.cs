@@ -1,28 +1,29 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SnackBar.Api.ViewModels;
-using SnackBar.Domain.Core.Bus;
 using SnackBar.Domain.Core.Notifications;
-using SnackBar.Domain.Pedidos.Repository;
-using System.Collections.Generic;
+using SnackBar.Domain.Interfaces;
 using SnackBar.Domain.Pedidos.Commands;
+using SnackBar.Domain.Pedidos.Repository;
+using System;
+using System.Collections.Generic;
 
 namespace SnackBar.Api.Controllers
 {
     public class PedidosController : BaseController
     {
-        private readonly IBus _bus;
+        private readonly IMediatorHandler _mediator;
         private readonly IMapper _mapper;
         private readonly IPedidoRepository _pedidoRepository;
 
-        public PedidosController(IDomainNotificationHandler<DomainNotification> notifications, 
-                                 IBus bus, 
+        public PedidosController(INotificationHandler<DomainNotification> notifications, 
+                                 IMediatorHandler mediator, 
                                  IMapper mapper,
                                  IPedidoRepository pedidoRepository) 
-            : base(notifications, bus)
+            : base(notifications, mediator)
         {
-            _bus = bus;
+            _mediator = mediator;
             _mapper = mapper;
             _pedidoRepository = pedidoRepository;
         }
@@ -46,7 +47,7 @@ namespace SnackBar.Api.Controllers
         public IActionResult Post([FromBody] DetalhePedidoViewModel eventoViewModel)
         {
             var pedidoCommand = _mapper.Map<RealizarPedidoCommand>(eventoViewModel);
-            _bus.SendCommand(pedidoCommand);
+            _mediator.EnviarComando(pedidoCommand);
 
             return Response(pedidoCommand);
         }
