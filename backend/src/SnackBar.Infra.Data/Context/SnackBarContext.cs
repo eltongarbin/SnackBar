@@ -20,6 +20,11 @@ namespace SnackBar.Infra.Data.Context
         public DbSet<PedidoLanche> PedidosLanches { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
 
+        public SnackBarContext(DbContextOptions<SnackBarContext> options)
+            : base(options) { }
+
+        public SnackBarContext() { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var config = new ConfigurationBuilder()

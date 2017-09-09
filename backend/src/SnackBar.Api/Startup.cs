@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +41,7 @@ namespace SnackBar.Api
                 switch (useInMemoryProvider)
                 {
                     case true:
-                        options.UseInMemoryDatabase();
+                        options.UseInMemoryDatabase("SnackBar");
                         break;
                     default:
                         options.UseSqlServer(sqlConnectionString);
@@ -92,8 +91,7 @@ namespace SnackBar.Api
 
         public void Configure(IApplicationBuilder app,
                               IHostingEnvironment env,
-                              ILoggerFactory loggerFactory,
-                              IHttpContextAccessor accessor)
+                              ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

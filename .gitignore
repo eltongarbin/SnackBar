@@ -20,3 +20,8 @@
 /backend/src/SnackBar.Application/SnackBar.Application.csproj.user
 /backend/src/SnackBar.Domain/SnackBar.Domain.csproj.user
 /backend/src/SnackBar.Api/SnackBar.Api.csproj.user
+/backend/src/SnackBar.Api/bin/Debug/netcoreapp2.0
+/backend/src/SnackBar.Domain/bin/Debug/netstandard2.0
+/backend/src/SnackBar.Domain.Core/bin/Debug/netstandard2.0
+/backend/src/SnackBar.Infra.CrossCutting.IoC/bin/Debug/netstandard2.0
+/backend/src/SnackBar.Infra.Data/bin/Debug/netstandard2.0
